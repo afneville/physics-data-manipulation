@@ -1,0 +1,25 @@
+#+TITLE: Physics Practical
+
+Data obtained during physics practicals often needs to be processed. Calculating the averages and uncertainties of each value in a large data-set can be tedious. I have written some scripts to make handling the data much faster.
+
+The example given here is an experiment to determine the relationship between /pressure/ and the /volume/ occupied by a gas.
+
+* Running Project
+
+*NB.* /instructions given for linux/unix systems/
+
+In a virtual-environment (or globally) install the dependencies with this command:
+
+#+begin_src shell
+
+python3 -m pip install -r requirements.txt
+
+#+end_src
+
+Entry point for the project is =app.py=, so run like this:
+
+#+begin_src shell
+
+python3 app.py
+
+#+end_src
