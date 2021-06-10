@@ -4,7 +4,7 @@ Data obtained during physics practicals often needs to be processed. Calculating
 
 The example given here is an experiment to determine the relationship between /pressure/ and the /volume/ occupied by a gas.
 
-* Running Project
+* Running the Project
 
 *NB.* /instructions given for linux/unix systems/
 

@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 
 import csv
-from pprint import pprint
 from data import control_variables
+from printing import *
 
 def import_data():
 
-    """ load data from csv file into 2d array and return to call site """
+    """Load data from csv file into 2d array and return to call site"""
 
     data = []
 
-    with open("./data/boyles_law_data.csv", "r") as file:
+    with open("./data/measured_variables.csv", "r") as file:
 
         file_handle = csv.reader(file)
         for row in file_handle:
@@ -20,30 +20,58 @@ def import_data():
 
     return data
 
-def display_raw_data(raw_data):
-
-    """ display input data for debugging """
-
-    print(control_variables.diameter)
-    print(control_variables.area)
-    print(control_variables.perc_unc_area)
-    raw_data[0][1:]
-    pprint(raw_data)
-
 def average_repeats(repeats):
 
-    """ average the repeat readings of volume taken during the experiment """
+    """Average the repeat readings of volume taken during the experiment"""
 
     return sum(repeats) / len(repeats)
+
+def make_cumulative_series(x):
+
+    """Find the cumulative totals of a series, useful for graph plotting"""
+
+    cumulative_totals = []
+    sum_x = 0 
+    for i in x:
+        sum_x += i 
+        cumulative_totals.append(sum_x)
+
+    return cumulative_totals
+
+def calculate_pressure(force, perc_unc_force):
+
+    """Calculate pressure with associated absolute uncertainty"""
+
+    # calculate pressure for each mass that is added
+    pressure = [i/control_variables.area for i in force]
+
+    # calculate the percentage uncertainty in pressure by adding percentage uncertainty of each constituent
+    perc_unc_pressure = [i + control_variables.perc_unc_area for i in perc_unc_force]
+    abs_unc_pressure = []
+
+    for value, perc_uncertainty in zip(pressure, perc_unc_pressure):
+
+        abs_unc_pressure.append((perc_uncertainty/100)*value)
+
+    return pressure, perc_unc_pressure
 
 def main():
 
     raw_data = import_data()
-    # display_raw_data(raw_data)
 
+    d_mass = [i[0] for i in raw_data]
+    d_volume = [average_repeats(i[1:]) for i in raw_data]
 
-    averaged_data = [[i[0], average_repeats(i[1:])] for i in raw_data]
-    # pprint(averaged_data)
+    mass = make_cumulative_series(d_mass)
+    volume = make_cumulative_series(d_volume)
+    volume = [i/(1E6) for i in volume]
+
+    perc_unc_mass = [(control_variables.abs_unc_mass/i)*100 for i in mass]
+    perc_unc_force = perc_unc_mass
+
+    force = [i * control_variables.gravity_acceleration for i in mass]
+    pressure, abs_unc_pressure = calculate_pressure(force, perc_unc_force)
+
 
 if __name__ == "__main__":
 
