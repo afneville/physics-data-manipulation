@@ -176,7 +176,7 @@ def main():
 
     plt.show()
 
-    processed_data = {"mass":mass,"force":force,"perc. unc. force":perc_unc_force,"pressure":pressure,"perc. unc. pressure":perc_unc_pressure,"abs. unc. pressure":abs_unc_pressure,"volume":volume,"log pressure":log_pressure,"abs. unc. log pressure":abs_unc_log_pressure,"log_volume":log_volume,"abs. unc. log volume":abs_unc_log_volume}
+    processed_data = {"mass (kg)":mass,"force (N)":force,"perc. unc. force":perc_unc_force,"pressure (pa)":pressure,"perc. unc. pressure":perc_unc_pressure,"abs. unc. pressure (+-pa)":abs_unc_pressure,"volume (m^3)":volume,"log pressure":log_pressure,"abs. unc. log pressure":abs_unc_log_pressure,"log_volume":log_volume,"abs. unc. log volume":abs_unc_log_volume}
     export_data(processed_data)
 
 if __name__ == "__main__":
