@@ -5,6 +5,7 @@ from data import control_variables
 from printing import *
 from math import log
 import matplotlib.pyplot as plt
+import numpy as np
 
 def import_data():
 
@@ -79,7 +80,7 @@ def main():
 
     force = [i * control_variables.gravity_acceleration for i in mass]
     perc_unc_force = perc_unc_mass
-    print_data(force, perc_unc_force)
+    # print_data(force, perc_unc_force)
 
     pressure = [i/control_variables.area for i in force]
     perc_unc_pressure = [i + control_variables.perc_unc_area for i in perc_unc_force]
@@ -89,18 +90,37 @@ def main():
 
         abs_unc_pressure.append((perc_uncertainty/100)*value)
 
-    print_data(pressure, perc_unc_pressure, abs_unc_pressure)
-    print_data(volume, control_variables.abs_unc_volume)
+    # print_data(pressure, perc_unc_pressure, abs_unc_pressure)
+    # print_data(volume, control_variables.abs_unc_volume)
 
     log_pressure = [log(i, 10) for i in pressure]
     abs_unc_log_pressure = [log(i, 10) for i in abs_unc_pressure]
-    print_data(log_pressure, abs_unc_log_pressure)
+    # print_data(log_pressure, abs_unc_log_pressure)
 
     log_volume = [log(i, 10) for i in volume]
     abs_unc_log_volume = [log(control_variables.abs_unc_volume, 10) for _ in volume]
-    print_data(log_volume, abs_unc_log_volume)
+    # print_data(log_volume, abs_unc_log_volume)
 
-    plt.scatter(log_volume, log_pressure)
+    # graph plotting
+    x = np.array(log_volume)
+    y = np.array(log_pressure)
+    # gradient, intercept = np.polyfit(x,y,1)
+    # print_data(gradient, intercept)
+
+    equation = np.polyfit(x,y,1)
+    f = np.poly1d(equation)
+
+    # for i in range(int(min(x)) - 2, int(max(x)) + 2):
+    #     plt.plot(i, f(i), 'go')
+
+    lower = int(min(x)) - 10
+    upper = int(max(x)) + 10
+    plt.plot((lower, upper), (f(lower), f(upper)), 'r')
+
+    plt.plot(log_volume, log_pressure, 'o')
+    # plt.plot(x, gradient*x + intercept)
+    plt.errorbar(log_volume, log_pressure, yerr=abs_unc_log_pressure, xerr=abs_unc_log_volume, fmt=" ", ecolor="grey", elinewidth=1, capsize=5)
+    plt.grid()
     plt.show()
 
 if __name__ == "__main__":
