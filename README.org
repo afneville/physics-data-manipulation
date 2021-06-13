@@ -1,12 +1,21 @@
 #+TITLE: Physics Practical
 
-Data obtained during physics practicals often needs to be processed. Calculating the averages and uncertainties of each value in a large data-set can be tedious. I have written some scripts to make handling the data much faster.
+Data obtained during a physics experiment often needs to be processed. Calculating the averages and uncertainties of each value in a large data-set can be tedious. The use of computers and software can make this process easier.
 
 The example given here is an experiment to determine the relationship between /pressure/ and the /volume/ occupied by a gas.
 
+* Important Files
+
+- =data/control_variables.py= contains the experimental control variables
+- =data/measured_variables.csv= is the raw data loaded by the program
+- =data/processed_data.csv= is the file where the program writes the processed data
+- =experiment.py= is the main script, responsible for the data processing
+
 * Running the Project
 
-*NB.* /instructions given for linux/unix systems/
+The program will process the data and write it to a csv file. Assuming all the dependencies are satisfied, a graph is also presented (not saved automatically).
+
+/NB. instructions given for linux/unix systems/
 
 In a virtual-environment (or globally) install the dependencies with this command:
 
@@ -16,10 +25,20 @@ python3 -m pip install -r requirements.txt
 
 #+end_src
 
-Entry point for the project is =app.py=, so run like this:
+Entry point for the project is =experiment.py=, so run like this:
 
 #+begin_src shell
 
 python3 app.py
 
 #+end_src
+
+Alternatively make the script executable and run:
+
+#+begin_src shell
+
+chmod u+x experiment.py
+./experiment.py
+
+#+end_src
+
