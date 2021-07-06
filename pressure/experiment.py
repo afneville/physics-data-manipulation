@@ -1,89 +1,14 @@
 #!/usr/bin/env python3
 
-import csv
-from pprint import pprint
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+import functions
+
 from data import control_variables
 from math import log
 import matplotlib.pyplot as plt
 import numpy as np
 
-class Counter():
-
-    """keep track of function calls"""
-
-    def __init__(self, f):
-
-        self._f = f
-        self._uses = 0
-
-    def __call__(self, *args):
-
-        self._uses += 1
-        print(f"\nnum_uses: {self._uses}\n")
-
-        self._f(args)
-
-
-@Counter
-def print_data(*args):
-
-    """pprint all the input data"""
-
-    for i in args[0]:
-
-        pprint(i)
-
-def import_data():
-
-    """Load data from csv file into 2d array and return to call site"""
-
-    data = []
-
-    with open("./data/measured_variables.csv", "r") as file:
-
-        file_handle = csv.reader(file)
-        for row in file_handle:
-
-            numeric_data = [float(i) for i in row]
-            data.append(numeric_data)
-
-    return data
-
-def export_data(data):
-
-    """ given a dictionary containing lists of data, write data to a csv file """
-
-    with open("./data/processed_data.csv", "w") as file:
-
-        file_handle = csv.writer(file)
-        columns = [key for key in data]
-        file_handle.writerow(columns)
-
-        for i in range(control_variables.num_readings):
-
-            row = []
-            for key in columns:
-                row.append(data[key][i])
-
-            file_handle.writerow(row)
-
-def average_repeats(repeats):
-
-    """Average the repeat readings of volume taken during the experiment"""
-
-    return sum(repeats) / len(repeats)
-
-def make_cumulative_series(x):
-
-    """Find the cumulative totals of a series, useful for graph plotting"""
-
-    cumulative_totals = []
-    sum_x = 0 
-    for i in x:
-        sum_x += i 
-        cumulative_totals.append(sum_x)
-
-    return cumulative_totals
 
 def calculate_pressure(force, perc_unc_force):
 
@@ -104,20 +29,20 @@ def calculate_pressure(force, perc_unc_force):
 
 def main():
 
-    raw_data = import_data()
+    raw_data = functions.import_data()
 
     d_mass = [i[0] for i in raw_data]
-    d_volume = [average_repeats(i[1:]) for i in raw_data]
+    d_volume = [functions.average_repeats(i[1:]) for i in raw_data]
 
-    mass = make_cumulative_series(d_mass)
-    abs_unc_mass = make_cumulative_series(control_variables.abs_unc_mass)
+    mass = functions.make_cumulative_series(d_mass)
+    abs_unc_mass = functions.make_cumulative_series(control_variables.abs_unc_mass)
 
     perc_unc_mass = []
     for value, abs_unc in zip(mass, abs_unc_mass):
 
         perc_unc_mass.append((abs_unc/value)*100)
 
-    volume = make_cumulative_series(d_volume)
+    volume = functions.make_cumulative_series(d_volume)
     volume = [i/(1E6) for i in volume] # convert to m^3
 
     force = [i * control_variables.gravity_acceleration for i in mass]
@@ -189,7 +114,7 @@ def main():
                       "log_volume":log_volume,
                       "abs. unc. log volume":abs_unc_log_volume}
 
-    export_data(processed_data)
+    functions.export_data(processed_data, control_variables.num_readings)
 
 if __name__ == "__main__":
 

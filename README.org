@@ -2,14 +2,16 @@
 
 Data obtained during a physics experiment often needs to be processed. Calculating the averages and uncertainties of each value in a large data-set can be tedious. The use of computers and software can make this process easier.
 
-The example given here is an experiment to determine the relationship between /pressure/ and the /volume/ occupied by a gas.
+The examples given here are organised in sub directories, which share the contents of the =functions= package (I couldn't think of a better name!).
 
 * Important Files
 
-- =data/control_variables.py= contains the experimental control variables
-- =data/measured_variables.csv= is the raw data loaded by the program
-- =data/processed_data.csv= is the file where the program writes the processed data
-- =experiment.py= is the main script, responsible for the data processing
+For each experiment this is how the files are used:
+
+- =./data/control_variables.py= contains the experimental control variables
+- =./data/measured_variables.csv= is the raw data loaded by the program
+- =./data/processed_data.csv= is the file where the program writes the processed data
+- =./experiment.py= is the main script, responsible for the data processing
 
 * Running the Project
 
@@ -25,11 +27,19 @@ python3 -m pip install -r requirements.txt
 
 #+end_src
 
+Switch to an experiment:
+
+#+begin_src shell
+
+cd ./pressure
+
+#+end_src
+
 Entry point for the project is =experiment.py=, so run like this:
 
 #+begin_src shell
 
-python3 app.py
+python3 experiment.py
 
 #+end_src
 
