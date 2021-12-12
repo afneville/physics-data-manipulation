@@ -1,54 +1,43 @@
-#+TITLE: Physics Practical
+#+TITLE: Physics Practicals
 
-Data obtained during a physics experiment often needs to be processed. Calculating the averages and uncertainties of each value in a large data-set can be tedious. The use of computers and software can make this process easier.
+This repository contains a set of scripts which process experimental data obtained during my physics classes. The raw data, collected during lessons, is stored in CSV format.
 
-The examples given here are organised in sub directories, which share the contents of the =functions= package (I couldn't think of a better name!).
+* Methodology
 
-* Important Files
+For each experiment conducted, the general procedure follows these steps:
 
-For each experiment this is how the files are used:
+1. load the raw data into the program
+2. process raw data to mitigate/reduce uncertainty
+3. manipulate raw data to establish a trend
+4. plot any such relationship on a graph
+5. export the processed data to CSV
 
-- =./data/control_variables.py= contains the experimental control variables
-- =./data/measured_variables.csv= is the raw data loaded by the program
-- =./data/processed_data.csv= is the file where the program writes the processed data
-- =./experiment.py= is the main script, responsible for the data processing
+* Project Structure
 
-* Running the Project
+The =experiments/= directory contains the scripts that do the data processing (1 per experiment). The data that these scripts work on is stored in the =data/= directory, which contains 3 subdirectories:
 
-The program will process the data and write it to a csv file. Assuming all the dependencies are satisfied, a graph is also presented (not saved automatically).
+- =in/= - contains the raw data
+- =out/= - processed data is written to this directory
+- =plots/= - generated plots and figures are saved to this directory
 
-/NB. instructions given for linux/unix systems/
+Common among all experiments is the /I/O/ of data. This is handled by a set of functions which are packaged separately to the individual experiments. Additionally, this repository contains some utilities for debugging, introspecting variables at run time. These utilities reside in the unimaginatively named =functions= package.
 
-In a virtual-environment (or globally) install the dependencies with this command:
+* Deployment
+
+Install the specified dependencies (you may want to create/start a virtual environment first):
 
 #+begin_src shell
-
 python3 -m pip install -r requirements.txt
-
 #+end_src
 
-Switch to an experiment:
+Edit the =config.py= file in the specified place to make sure that the scripts can find the input data.
 
-#+begin_src shell
-
-cd ./pressure
-
+#+begin_src python
+import os
+data_dir = os.path.expanduser('~') + "/repos/physics/data/" # << edit this
+in_dir = data_dir+"in/"
+out_dir = data_dir+"out/"
+plot_dir = data_dir+"plots/"
 #+end_src
 
-Entry point for the project is =experiment.py=, so run like this:
-
-#+begin_src shell
-
-python3 experiment.py
-
-#+end_src
-
-Alternatively make the script executable and run:
-
-#+begin_src shell
-
-chmod u+x experiment.py
-./experiment.py
-
-#+end_src
-
+From the root of the project, invoke python on any of the scripts in the =experiments/= directory. This will populate the data directory with processed data and a plot of the results.
