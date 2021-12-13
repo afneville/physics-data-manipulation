@@ -1,5 +1,7 @@
 #+TITLE: Physics Practicals
 
+[[./data/plots/capacitor.png]]
+
 This repository contains a set of scripts which process experimental data obtained during my physics classes. The raw data, collected during lessons, is stored in CSV format.
 
 * Methodology
